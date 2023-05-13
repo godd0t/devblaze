@@ -35,8 +35,8 @@ Traditional cookiecutter templates are great, but DevBlaze takes it a step furth
    
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/godd0t/devblaze/blob/main/CONTRIBUTING.md) for more details.
 
 ## License
 
-DevBlaze is licensed under the [MIT License](LICENSE).
+DevBlaze is licensed under the [MIT License](https://github.com/godd0t/devblaze/blob/main/LICENSE).

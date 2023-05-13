@@ -35,6 +35,7 @@ dev = [
     "black ==23.3.0",
     "build ==0.10.0",
     "ruff ==0.0.267",
+    "twine ==4.0.2",
 ]
 
 [tool.hatchling]

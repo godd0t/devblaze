@@ -1,0 +1,86 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "devblaze"
+description = "A tool for creating and managing development and production environments."
+readme = "README.md"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Web Environment",
+    "Framework :: Django :: 4.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "cookiecutter ==2.1.1",
+    "textual ==0.24.1",
+]
+dynamic = ["version"]
+
+[project.license]
+file = "LICENSE"
+
+[project.scripts]
+devblaze = "devblaze.main:main"
+
+[project.optional-dependencies]
+dev = [
+    "black ==23.3.0",
+    "build ==0.10.0",
+    "ruff ==0.0.267",
+]
+
+[tool.hatchling]
+allow-direct-references = true
+
+[tool.hatch.version]
+path = "devblaze/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["devblaze"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+include = '\.pyi?$'
+extend-exclude = """
+^(.*/)?migrations/.*$
+"""
+
+[tool.ruff]
+format = "grouped"
+line-length = 88
+extend-exclude = [
+    ".migrations",
+    ".media",
+    ".static",
+    "manage.py",
+    ".test_data",
+    "__init__.py",
+]
+select = [
+    "E",
+    "F",
+]
+ignore = [
+    "E501",
+    "B008",
+    "C901",
+    "F405",
+]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+target-version = "py311"
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.isort]
+force-to-top = ["devblaze"]
+known-first-party = ["devblaze"]

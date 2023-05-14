@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from textual.app import App, ComposeResult
-from textual.containers import Grid, Horizontal
+from textual.containers import Horizontal, Grid
 from textual.widgets import (
     Input,
     TextLog,
     Label,
-    Button,
     Header,
     Footer,
     RadioSet,
@@ -14,83 +13,14 @@ from textual.widgets import (
 )
 from textual.reactive import reactive
 from cookiecutter.main import cookiecutter
-from textual.screen import ModalScreen
 
-PROJECT_TYPE_OPTIONS = [("django", "django"), ("ddd", "ddd")]
-CSS_PATH = "static/cookiecutter.css"
-
-
-class QuitScreen(ModalScreen):
-    """Screen with a dialog to quit."""
-
-    CSS_PATH = CSS_PATH
-    BINDINGS = [("enter", "confirm_quit", "Confirm Quit")]
-
-    def compose(self) -> ComposeResult:
-        yield Grid(
-            Label("Are you sure you want to quit?", id="question"),
-            Button("Quit", variant="error", id="quit"),
-            Button("Cancel", variant="primary", id="cancel"),
-            id="dialog",
-        )
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "quit":
-            self.app.exit()
-        else:
-            self.app.pop_screen()
-
-    def action_confirm_quit(self) -> None:
-        self.app.exit()
+from devblaze.textual_utils.screens.error import ErrorScreen
+from devblaze.textual_utils.screens.quit import QuitScreen
+from devblaze.textual_utils.screens.success import SuccessScreen
+from devblaze.textual_utils.constants import CSS_PATH
 
 
-class SuccessScreen(ModalScreen):
-    """Screen with a dialog to quit."""
-
-    CSS_PATH = CSS_PATH
-    BINDINGS = [("enter", "on_success", "Ok")]
-
-    def compose(self) -> ComposeResult:
-        yield Grid(
-            Label("Project created successfully!", id="success"),
-            Button("Ok", variant="primary", id="ok"),
-            id="dialog",
-        )
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "ok":
-            self.app.exit()
-
-    def action_on_success(self) -> None:
-        self.app.exit()
-
-
-class ErrorScreen(ModalScreen):
-    """Screen to display error messages."""
-
-    CSS_PATH = CSS_PATH
-    BINDINGS = [("enter", "on_error_ok", "Ok")]
-
-    def __init__(self, error_message: str):
-        super().__init__()
-        self.error_message = error_message
-
-    def compose(self) -> ComposeResult:
-        yield Grid(
-            Label(self.error_message, id="error-message"),
-            Button("Ok", variant="error", id="error-button"),
-            id="error-dialog",
-        )
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "error-button":
-            self.app.pop_screen()
-
-    def action_on_error_ok(self) -> None:
-        self.app.exit()
-
-
-class CookiecutterApp(App):
+class CookiecutterApp(App[None]):
     """Prompts for project_type and project_name, then runs cookiecutter."""
 
     CSS_PATH = CSS_PATH
@@ -126,14 +56,16 @@ class CookiecutterApp(App):
             with RadioSet(id="project_type_set"):
                 yield RadioButton("django", id="project_type")
                 yield RadioButton("ddd")
-        yield Input(
-            placeholder="Enter project name", id="project_name", classes="hidden"
-        )
-        yield Input(placeholder="Enter app name", id="app_name", classes="hidden")
-        yield Input(
-            placeholder="Enter project base name",
-            id="project_base_name",
-            classes="hidden",
+        yield Grid(
+            Input(
+                placeholder="Enter project name", id="project_name",
+            ),
+            Input(placeholder="Enter app name", id="app_name"),
+            Input(
+                placeholder="Enter project base name",
+                id="project_base_name",
+            ),
+            id="project_inputs_grid", classes="hidden"
         )
         with Horizontal():
             yield Label("Use Git", id="use_git_label", classes="hidden")
@@ -170,28 +102,66 @@ class CookiecutterApp(App):
     async def on_radio_set_changed(self, event: RadioSet.Changed) -> None:
         self.project_type = str(event.pressed.label)
         self.query_one("#project_type_set").add_class("hidden")
-        self.query_one("#project_name").remove_class("hidden")
+        self.query_one("#project_type_label").add_class("hidden")
+        self.query_one("#project_inputs_grid").remove_class("hidden")
         self.query_one("#project_name").focus()
 
     async def on_input_submitted(self, event: Input.Submitted) -> None:
-        self.query_one(TextLog).write(
-            f"Event value: {event.value}, Event input: {event.input.id}"
-        )
         if event.input.id == "project_name":
             self.project_name = event.value.strip()
-            self.query_one("#project_name").add_class("hidden")
-            self.query_one("#app_name").remove_class("hidden")
-            self.query_one("#app_name").focus()
-        elif event.input.id == "app_name":
-            self.app_name = event.value
-            self.query_one("#app_name").add_class("hidden")
-            self.query_one("#project_base_name").remove_class("hidden")
-            self.query_one("#project_base_name").focus()
-        elif event.input.id == "project_base_name":
-            self.project_base_name = event.value
-            self.query_one("#project_base_name").add_class("hidden")
+
+        if event.input.id == "app_name":
+            self.app_name = event.value.strip()
+
+        if event.input.id == "project_base_name":
+            self.query_one(TextLog).write(
+                f"Project Type: {self.project_type}, Project Name: {self.project_name}, App Name: {self.app_name}, Project Base Name: {self.project_base_name}"
+            )
+            self.project_base_name = event.value.strip()
+            self.query_one("#project_inputs_grid").add_class("hidden")
             self.query_one("#use_git_set").remove_class("hidden")
+            self.query_one("#use_git_label").remove_class("hidden")
             self.query_one("#use_git_set").focus()
+            self.use_git = self.query_one("#use_git").value
+            self.query_one("#use_git_set").add_class("hidden")
+            self.query_one("#use_git_label").add_class("hidden")
+            self.query_one("#use_celery_set").remove_class("hidden")
+            self.query_one("#use_celery_label").remove_class("hidden")
+            self.query_one("#use_celery_set").focus()
+            self.use_celery = self.query_one("#use_celery").value
+            self.query_one("#use_celery_set").add_class("hidden")
+            self.query_one("#use_celery_label").add_class("hidden")
+            self.query_one("#use_celery_set").remove_class("hidden")
+            self.query_one("#use_celery_label").remove_class("hidden")
+            self.query_one("#use_celery_set").focus()
+            self.use_celery_beat = self.query_one("#use_celery_beat").value
+            self.query_one("#use_celery_set").add_class("hidden")
+            self.query_one("#use_celery_label").add_class("hidden")
+            # self.query_one("#use_postgres_set").remove_class("hidden")
+            # self.query_one("#use_postgres_set").focus()
+            # self.use_postgres = self.query_one("#use_postgres").value
+            # self.query_one("#use_postgres_set").add_class("hidden")
+            # self.query_one("#use_postgres_label").add_class("hidden")
+            # self.query_one("#use_pytest_set").remove_class("hidden")
+            # self.query_one("#use_pytest_set").focus()
+            # self.use_pytest = self.query_one("#use_pytest").value
+            # self.query_one("#use_pytest_set").add_class("hidden")
+            # self.query_one("#use_pytest_label").add_class("hidden")
+        # if event.input.id == "project_name":
+        #     self.project_name = event.value.strip()
+        #     self.query_one("#project_name").add_class("hidden")
+        #     self.query_one("#app_name").remove_class("hidden")
+        #     self.query_one("#app_name").focus()
+        # elif event.input.id == "app_name":
+        #     self.app_name = event.value
+        #     self.query_one("#app_name").add_class("hidden")
+        #     self.query_one("#project_base_name").remove_class("hidden")
+        #     self.query_one("#project_base_name").focus()
+        # elif event.input.id == "project_base_name":
+        #     self.project_base_name = event.value
+        #     self.query_one("#project_base_name").add_class("hidden")
+        #     self.query_one("#use_git_set").remove_class("hidden")
+        #     self.query_one("#use_git_set").focus()
 
     async def on_radio_set_changed_bool(self, event: RadioSet.Changed) -> None:
         self.use_git = bool(event.pressed.label)
@@ -250,7 +220,7 @@ class CookiecutterApp(App):
             self.action_on_success()
         except Exception as e:
             self.query_one(TextLog).write(f"Error: {e}")
-            # self.push_screen(ErrorScreen(str(e)))
+            self.push_screen(ErrorScreen(str(e)))
 
 
 if __name__ == "__main__":

@@ -24,6 +24,9 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.urls]
+Homepage = "https://github.com/godd0t/devblaze"
+
 [project.license]
 file = "LICENSE"
 

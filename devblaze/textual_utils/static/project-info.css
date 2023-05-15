@@ -1,0 +1,29 @@
+ProjectInfoContainer {
+    background: $panel;
+    padding: 1;
+    dock: bottom;
+    border-right: vkey $background;
+}
+
+ProjectInfoContainer > Column {
+    height: auto;
+    min-height: 100vh;
+    align: center top;
+    overflow: hidden;
+}
+
+ProjectInfoContainer > Label {
+    width: 30%;
+}
+
+ProjectInfoContainer > Input {
+    width: 30%;
+}
+
+ProjectInfoContainer > Column > Input {
+    width: 30%;
+}
+
+ProjectInfoContainer > Column > RadioSet {
+    width: 30%;
+}

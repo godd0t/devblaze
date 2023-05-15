@@ -1,0 +1,33 @@
+UseServiceBaseContainer {
+    background: $panel;
+    padding: 1;
+    dock: bottom;
+    border-right: vkey $background;
+}
+
+UseServiceBaseContainer.-hidden {
+    display: none;
+}
+
+UseServiceBaseContainer > Column {
+    height: auto;
+    min-height: 100vh;
+    align: center top;
+    overflow: hidden;
+}
+
+UseServiceBaseContainer > Label {
+    width: 30%;
+}
+
+UseServiceBaseContainer > RadioSet {
+    width: 30%;
+}
+
+UseServiceBaseContainer > Column > Label {
+    width: 30%;
+}
+
+UseServiceBaseContainer > Column > RadioSet {
+    width: 30%;
+}

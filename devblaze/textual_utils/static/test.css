@@ -1,0 +1,78 @@
+Screen {
+    background: $surface-darken-1;
+}
+
+
+BaseApp {
+    display: block;
+    max-width: 50%;
+}
+
+TextLog {
+    background: $surface;
+    color: $text;
+    height: 50vh;
+    dock: bottom;
+    layer: notes;
+    border-top: hkey $primary;
+    offset-y: 0;
+    transition: offset 400ms in_out_cubic;
+    padding: 0 1 1 1;
+}
+
+TextLog.-hidden {
+    offset-y: 100%;
+}
+
+ProjectTypeContainer {
+    background: $panel;
+    padding: 1;
+    dock: bottom;
+    border-right: vkey $background;
+}
+
+ProjectTypeContainer.-hidden {
+    display: none;
+}
+
+ProjectTypeContainer .label {
+    width: 1fr;
+    padding: 1 2;
+    color: $text-muted;
+    align: center top;
+
+}
+
+ProjectTypeContainer .radio-set {
+    width: 1fr;
+    padding: 1 2;
+    align: center bottom;
+}
+
+Column {
+    height: auto;
+    min-height: 100vh;
+    align: center top;
+    overflow: hidden;
+}
+
+Column.-hidden {
+    display: none;
+}
+
+Column #project_type_label {
+    width: 30%;
+}
+
+
+Column #project_type {
+    width: 30%;
+}
+
+Column #repo_name {
+    width: 30%;
+}
+
+Column #project_type.-hidden {
+    width: 30%;
+}

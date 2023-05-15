@@ -58,14 +58,16 @@ class CookiecutterApp(App[None]):
                 yield RadioButton("ddd")
         yield Grid(
             Input(
-                placeholder="Enter project name", id="project_name",
+                placeholder="Enter project name",
+                id="project_name",
             ),
             Input(placeholder="Enter app name", id="app_name"),
             Input(
                 placeholder="Enter project base name",
                 id="project_base_name",
             ),
-            id="project_inputs_grid", classes="hidden"
+            id="project_inputs_grid",
+            classes="hidden",
         )
         with Horizontal():
             yield Label("Use Git", id="use_git_label", classes="hidden")

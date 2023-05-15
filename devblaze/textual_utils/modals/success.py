@@ -1,23 +1,23 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
-from textual.app import ComposeResult
 from textual.containers import Grid
 from textual.screen import ModalScreen
-from textual.widgets import Label, Button
+from textual.widgets import Button, Label
 
-from devblaze.textual_utils.constants import CSS_PATH
+if TYPE_CHECKING:
+    from textual.app import ComposeResult
 
 
 class SuccessScreen(ModalScreen):
     """Screen with a dialog to quit."""
 
-    CSS_PATH = CSS_PATH
     BINDINGS = [("enter", "on_success", "Ok")]
 
     def compose(self) -> ComposeResult:
         yield Grid(
             Label("Project created successfully!", id="success"),
-            Button("Ok", variant="primary", id="ok"),
+            Button("Ok", variant="success", id="ok"),
             id="dialog",
         )
 

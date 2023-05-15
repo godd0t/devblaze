@@ -1,0 +1,23 @@
+SuccessScreen {
+    align: center middle;
+}
+
+SuccessScreen > Grid {
+    width: 50%;
+    height: 100%;
+    align: center middle;
+    border: thick $background 80%;
+    background: $surface;
+}
+
+SuccessScreen > Grid > Label {
+    width: 30%;
+    height: 30%;
+    align: center middle;
+    content-align: center middle;
+}
+
+
+SuccessScreen > Grid > Button {
+    width: 30%;
+}

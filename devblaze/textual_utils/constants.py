@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-CSS_PATH = "static/cookiecutter.css"
+CSS_PATH = "static/test.css"
 
 COOKIECUTTER_TEMPLATE_URL = "https://github.com/godd0t/streamline-cookiecutter"
 

@@ -3,7 +3,7 @@ import sys
 from rich.console import Console
 from rich.table import Table
 
-from devblaze.textual_utils.screen import CookiecutterApp
+from app import CookiecutterApp
 
 
 def main():

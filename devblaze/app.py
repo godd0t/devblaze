@@ -12,12 +12,11 @@ from textual.widgets import (
     RadioButton,
 )
 from textual.reactive import reactive
-from cookiecutter.main import cookiecutter
 
-from devblaze.textual_utils.screens.error import ErrorScreen
-from devblaze.textual_utils.screens.quit import QuitScreen
-from devblaze.textual_utils.screens.success import SuccessScreen
+
+from cookiecutter.main import cookiecutter
 from devblaze.textual_utils.constants import CSS_PATH
+from devblaze.textual_utils.modals.success import SuccessScreen
 
 
 class CookiecutterApp(App[None]):
@@ -117,7 +116,9 @@ class CookiecutterApp(App[None]):
 
         if event.input.id == "project_base_name":
             self.query_one(TextLog).write(
-                f"Project Type: {self.project_type}, Project Name: {self.project_name}, App Name: {self.app_name}, Project Base Name: {self.project_base_name}"
+                f"Project Type: {self.project_type},"
+                f" Project Name: {self.project_name},"
+                f" App Name: {self.app_name}, Project Base Name: {self.project_base_name}"
             )
             self.project_base_name = event.value.strip()
             self.query_one("#project_inputs_grid").add_class("hidden")
@@ -178,7 +179,7 @@ class CookiecutterApp(App[None]):
         self.query_one("#use_celery_set").add_class("hidden")
 
     def action_request_quit(self) -> None:
-        self.push_screen(QuitScreen())
+        self.push_screen(SuccessScreen())
 
     def action_on_success(self) -> None:
         self.push_screen(SuccessScreen())
@@ -222,7 +223,7 @@ class CookiecutterApp(App[None]):
             self.action_on_success()
         except Exception as e:
             self.query_one(TextLog).write(f"Error: {e}")
-            self.push_screen(ErrorScreen(str(e)))
+            self.push_screen(SuccessScreen(str(e)))
 
 
 if __name__ == "__main__":

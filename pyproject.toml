@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "devblaze"
 description = "A tool for creating and managing development and production environments."
 readme = "README.md"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 1 - Planning",
     "Environment :: Web Environment",
@@ -17,6 +18,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Version Control :: Git",
     "Topic :: Utilities",
+    "Topic :: System :: Logging",
 ]
 dependencies = [
     "cookiecutter ==2.1.1",
@@ -24,11 +26,15 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.license]
+text = "MIT"
+
+[[project.authors]]
+name = "Lirim Shala"
+email = "lirrishala@gmail.com"
+
 [project.urls]
 Homepage = "https://github.com/godd0t/devblaze"
-
-[project.license]
-file = "LICENSE"
 
 [project.scripts]
 devblaze = "devblaze.main:main"
@@ -36,9 +42,9 @@ devblaze = "devblaze.main:main"
 [project.optional-dependencies]
 dev = [
     "black ==23.3.0",
-    "build ==0.10.0",
     "ruff ==0.0.267",
     "twine ==4.0.2",
+    "build ==0.10.0",
 ]
 
 [tool.hatchling]
